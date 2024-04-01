@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+
+        .city-box {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .city-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        .city-overlay {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .city-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .weather-info {
+            margin-bottom: 10px;
+        }
+
+        .weather-info span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mt-4 mb-4 text-center fw-bold">Weather</h1>
+    <div class="row" id="weather-container">
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var cities = [
+            { name: 'Prague', background: 'https://images.contentstack.io/v3/assets/blt06f605a34f1194ff/blt0f89ce96fbe77860/625c31b800a8bb4b77960d65/BCC-2022-IT-PRAGUE-DAY1-STOP6.jpg?width=704&heigth=704&format=webp' },
+            { name: 'London', background: 'https://bloximages.chicago2.vip.townnews.com/thestar.com/content/tncms/assets/v3/editorial/e/62/e62eb1d8-c913-5c0b-86f1-030bc4bd741a/63da7fb18577d.image.jpg?resize=1200%2C800' },
+            { name: 'New York', background: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/800px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg' },
+            { name: 'Tokyo', background: 'https://www.cksen.cz/modules/articles/images/800/Tokyo-Skytree.jpg' },
+            { name: 'Sydney', background: 'https://wakeup.com.au/wp-content/themes/yootheme/cache/3shutterstock_1094901527-2fa9cd47.jpeg' }
+        ];
+
+        cities.forEach(function(city) {
+            $.getJSON("https://api.openweathermap.org/data/2.5/weather?q=" + city.name + "&appid=c58db2d3a954e6ef4f685e35831519dd&units=metric", function (data) {
+                var cityBox = '<div class="col-md-4"><div class="city-box" style="background-image: url(' + city.background + ');"><div class="city-background"></div><div class="city-overlay"><div class="city-name">' + city.name + '</div><div class="weather-info">Temperature: <span>' + data.main.temp + '°C</span></div><div class="weather-info">Humidity: <span>' + data.main.humidity + '%</span></div><div class="weather-info">Wind: <span>' + data.wind.speed + ' m/s</span></div><div class="weather-info">Weather: <span>' + data.weather[0].main + '</span></div><div class="weather-info">Description: <span>' + data.weather[0].description + '</span></div></div></div></div>';
+                $('#weather-container').append(cityBox);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
